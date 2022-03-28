@@ -10,4 +10,147 @@ html {
 
 body {
   font-family: sans-serif;
+  color: #121212;
+  background: #2980b9; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right bottom,
+    #ffffff,
+    #6dd5fa,
+    #2980b9
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right bottom,
+    #ffffff,
+    #6dd5fa,
+    #2980b9
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  height: 100vh;
+  padding-top: 3rem;
+}
+
+button {
+  color: inherit;
+  font-size: 3rem;
+  padding: 1rem 1.5rem;
+  width: 7rem;
+  height: 7rem;
+  border-radius: 1rem;
+  text-align: center;
+  display: inline-block;
+  border: none;
+  outline: 2px solid #121212;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.5);
+  transition: all 0.2s;
+}
+
+button:active {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+.btn-clear {
+  background-color: #e95fa0;
+}
+
+.btn-clear:hover {
+  background-color: #dd448e;
+}
+
+.btn-num {
+  background-color: #ffc8dd;
+}
+
+.btn-num:hover {
+  background-color: #ffafcc;
+}
+
+.btn-operations {
+  background-color: #bde0fe;
+}
+
+.btn-operations:hover {
+  background-color: #a2d2ff;
+}
+
+.calculator {
+  width: 42.4rem;
+  height: 62rem;
+  background-color: #cdb4db;
+  margin: 0 auto;
+  padding: 2rem 4rem;
+  border-radius: 5rem;
+  outline: 2px solid #121212;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.5);
+}
+
+.calculator__monitor {
+  height: 20%;
+  background-color: #fff;
+  border-radius: 2.5rem;
+  outline: 2px solid #121212;
+  text-align: right;
+  padding: 2rem;
+}
+
+.calculator__monitor-line-1 {
+  font-size: 2rem;
+  margin-top: -1rem;
+  color: #575757;
+}
+.calculator__monitor-line-2 {
+  font-size: 6rem;
+}
+
+.calculator__body {
+  height: 70%;
+  padding: 3rem 0;
+}
+
+.calculator__body-line {
+  display: flex;
+  gap: 2.1rem;
+}
+
+.calculator__body-line:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+/********** FOOTER SECTION  ***********/
+
+footer {
+  padding-top: 3rem;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  letter-spacing: 0.3rem;
+}
+
+footer span {
+  margin-right: 0.5rem;
+}
+
+.git-logo {
+  font-size: 2rem;
+  color: #555;
+}
+
+.git-logo:hover,
+.git-logo:active {
+  color: #000;
+  animation: github 0.5s infinite ease;
+}
+
+@keyframes github {
+  0% {
+    transform: rotate(-15deg) scale(1.2);
+  }
+  50% {
+    transform: rotate(15deg) scale(1.2);
+  }
+  100% {
+    transform: rotate(-15deg) scale(1.2);
+  }
 }
