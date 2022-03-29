@@ -14,6 +14,8 @@ const btnBackspace = document.querySelector(".btn-backspace");
 const btnEqual = document.querySelector(".btn-equal");
 
 let firstNum, secondNum, firstOperator, secondOperator;
+let isOperatorPressed = false;
+let num = 0;
 
 btnClear.addEventListener("click", function () {
   lineBottom.textContent = "0";
@@ -28,37 +30,52 @@ function appendNum() {
   for (let btn of btnNum) {
     btn.addEventListener("click", function () {
       if (lineBottom.textContent === "0") lineBottom.textContent = "";
-      if (!firstNum) firstNum = btn.textContent;
-      else secondNum = btn.textContent;
+      num += btn.textContent;
       lineBottom.textContent += `${btn.textContent}`;
     });
   }
+}
+
+function storeNum() {
+  !firstNum ? (firstNum = num) : (secondNum = num);
+  num = 0;
 }
 
 function setOperator() {
   for (let btn of btnOperators) {
     btn.addEventListener("click", function () {
+      storeNum();
+      console.log(firstNum, secondNum, num);
       if (!firstOperator) firstOperator = btn.textContent;
-      if (lineBottom.textContent === "0") lineBottom.textContent = "";
+      //   if (lineBottom.textContent === "0") lineBottom.textContent = "";
       lineBottom.textContent += `${btn.textContent}`;
+
+      if (firstOperator) {
+        // secondOperator = btn.textContent;
+        // calculate();
+      }
     });
   }
 }
 
-function calculate() {
+function calculator() {
   appendNum();
   setOperator();
-  btnEqual.addEventListener("click", () => {
-    lineTop.textContent = lineBottom.textContent;
-    lineBottom.textContent = operate(firstOperator, firstNum, secondNum);
-    firstNum = lineBottom.textContent;
-    secondNum = 0;
-    firstOperator = "";
-    secondOperator = "";
-  });
+  btnEqual.addEventListener("click", calculate);
+
+  //   if (!firstOperator) calculate();
 }
 
-calculate();
+function calculate() {
+  lineTop.textContent = lineBottom.textContent;
+  lineBottom.textContent = operate(firstOperator, firstNum, secondNum);
+  firstNum = lineBottom.textContent;
+  secondNum = 0;
+  firstOperator = "";
+  secondOperator = "";
+}
+
+calculator();
 
 function add(x, y) {
   return x + y;
@@ -87,7 +104,7 @@ function operate(operation, x, y) {
     case "*":
       return multiply(x, y);
     case "÷":
-      if (y === 0) return null;
+      if (y === 0) return "error";
       else return divide(x, y);
     default:
       return null;
