@@ -65,11 +65,13 @@ button:active {
   background-color: #ffafcc;
 }
 
-.btn-operations {
+.btn-operations,
+.btn-equal {
   background-color: #bde0fe;
 }
 
-.btn-operations:hover {
+.btn-operations:hover,
+.btn-equal:hover {
   background-color: #a2d2ff;
 }
 
