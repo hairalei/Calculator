@@ -65,12 +65,11 @@ button:active {
   background-color: #ffafcc;
 }
 
-.btn-operations,
-.btn-equal {
+.btn-nondigit {
   background-color: #bde0fe;
 }
 
-.btn-operations:hover,
+.btn-nondigit:hover,
 .btn-equal:hover {
   background-color: #a2d2ff;
 }
