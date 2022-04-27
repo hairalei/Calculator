@@ -8,6 +8,7 @@ year.textContent = new Date().getFullYear();
 const lineTop = document.querySelector(".calculator__monitor-line-1");
 const lineBottom = document.querySelector(".calculator__monitor-line-2");
 const btnNum = document.querySelectorAll(".btn-num");
+const btns = document.querySelectorAll("button");
 const btnOperators = document.querySelectorAll(".btn-operations");
 const btnClear = document.querySelector(".btn-clear");
 const btnBackspace = document.querySelector(".btn-backspace");
@@ -65,4 +66,35 @@ function operate(operation, x, y) {
   }
 }
 
+function updateDisplay() {
+  lineBottom.textContent = calculator.displayValue;
+}
+
+function inputDigits(num) {
+  const { displayValue } = calculator;
+  calculator.displayValue = displayValue === "0" ? num : displayValue + num;
+}
+
 //Event listeners
+btnClear.addEventListener("click", init);
+
+btnBackspace.addEventListener("click", function (e) {
+  calculator.displayValue = calculator.displayValue.slice(0, -1);
+  updateDisplay();
+});
+
+btns.forEach(function (key) {
+  key.addEventListener("click", function (e) {
+    const { target } = e;
+
+    if (target.classList.contains("btn-num")) {
+      console.log("num", target.value);
+      inputDigits(target.value);
+      updateDisplay();
+    } else if (target.classList.contains("btn-operations")) {
+      console.log("operator", target.value);
+    } else if (target.classList.contains("btn-decimal")) {
+      console.log("decimal", target.value);
+    }
+  });
+});
