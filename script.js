@@ -13,18 +13,22 @@ const btnClear = document.querySelector(".btn-clear");
 const btnBackspace = document.querySelector(".btn-backspace");
 const btnEqual = document.querySelector(".btn-equal");
 
-let firstNum, secondNum, firstOperator, secondOperator;
-let num = 0;
+const calculator = {
+  firstNum: 0,
+  secondNum: 0,
+  firstOperator: null,
+  secondOperator: null,
+};
 
-btnClear.addEventListener("click", function () {
+function init() {
   lineBottom.textContent = "0";
   lineTop.innerHTML = "&nbsp;";
-  num = 0;
   firstNum = 0;
   secondNum = 0;
   firstOperator = "";
   secondOperator = "";
-});
+}
+init();
 
 function add(x, y) {
   return x + y;
@@ -59,3 +63,7 @@ function operate(operation, x, y) {
       return null;
   }
 }
+
+//Event listeners
+
+btnClear.addEventListener("click", init);
