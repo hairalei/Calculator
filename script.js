@@ -9,6 +9,7 @@ const lineTop = document.querySelector(".calculator__monitor-line-1");
 const lineBottom = document.querySelector(".calculator__monitor-line-2");
 const btnNum = document.querySelectorAll(".btn-num");
 const btns = document.querySelectorAll("button");
+const keys = document.querySelector(".calculator__body");
 const btnOperators = document.querySelectorAll(".btn-operations");
 const btnClear = document.querySelector(".btn-clear");
 const btnBackspace = document.querySelector(".btn-backspace");
@@ -75,6 +76,23 @@ function inputDigits(num) {
   calculator.displayValue = displayValue === "0" ? num : displayValue + num;
 }
 
+function displayKeyValues(e) {
+  const { target } = e;
+
+  if (target.classList.contains("btn-num")) {
+    inputDigits(target.value);
+  }
+
+  if (target.classList.contains("btn-operations")) {
+    inputDigits(target.value);
+  }
+  if (target.classList.contains("btn-decimal")) {
+    if (calculator.displayValue.includes(".")) return;
+    inputDigits(target.value);
+  }
+  updateDisplay();
+}
+
 //Event listeners
 btnClear.addEventListener("click", init);
 
@@ -83,18 +101,4 @@ btnBackspace.addEventListener("click", function (e) {
   updateDisplay();
 });
 
-btns.forEach(function (key) {
-  key.addEventListener("click", function (e) {
-    const { target } = e;
-
-    if (target.classList.contains("btn-num")) {
-      console.log("num", target.value);
-      inputDigits(target.value);
-      updateDisplay();
-    } else if (target.classList.contains("btn-operations")) {
-      console.log("operator", target.value);
-    } else if (target.classList.contains("btn-decimal")) {
-      console.log("decimal", target.value);
-    }
-  });
-});
+keys.addEventListener("click", displayKeyValues);
