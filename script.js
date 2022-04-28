@@ -27,6 +27,7 @@ const calculator = {
 function init() {
   lineBottom.textContent = 0;
   lineTop.innerHTML = "&nbsp;";
+  lineBottom.style.fontSize = "6rem";
   calculator.displayValue = "0";
   calculator.firstNum = null;
   calculator.secondNum = null;
@@ -69,15 +70,15 @@ function operate(operation, x, y) {
 }
 
 function updateDisplay() {
-  if (String(calculator.displayValue).length > 9) {
-    lineBottom.style.fontSize = "4rem";
-    lineBottom.textContent = "MAX DIGITS REACHED";
-  } else if (
+  if (
     String(calculator.displayValue).length >= 7 &&
     calculator.displayValue < 1
   )
     lineBottom.textContent = Number(calculator.displayValue).toFixed(7);
-  else lineBottom.textContent = calculator.displayValue;
+  else if (String(calculator.displayValue).length > 9) {
+    lineBottom.style.fontSize = "4rem";
+    lineBottom.textContent = "MAX DIGITS REACHED";
+  } else lineBottom.textContent = calculator.displayValue;
 }
 
 function inputDigits(num) {
@@ -104,7 +105,6 @@ function displayKeyValues(e) {
     }
   }
   if (calculator.waitingForSecondNum && target.value === "=") {
-    console.log(calculator);
     calculator.secondNum = calculator.displayValue;
     lineTop.textContent = calculator.firstNum + calculator.secondNum;
     calculator.waitingForSecondNum = false;
