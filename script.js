@@ -94,24 +94,23 @@ function displayKeyValues(e) {
   }
 
   if (target.classList.contains("btn-operations")) {
+    console.log(calculator);
     inputDigits(target.value);
-    calculator.firstNum = calculator.displayValue;
-    calculator.displayValue = "0";
-    lineTop.textContent = calculator.firstNum;
-    calculator.waitingForSecondNum = true;
 
-    if (calculator.waitingForSecondNum) {
-      calculator.operator = calculator.firstNum.slice(-1);
-    }
+    calculator.operator = calculator.displayValue.slice(-1);
+    calculator.firstNum = calculator.displayValue.slice(0, -1);
+    calculator.displayValue = "0";
+    lineTop.textContent = calculator.firstNum + calculator.operator;
+    calculator.waitingForSecondNum = true;
   }
   if (calculator.waitingForSecondNum && target.value === "=") {
     calculator.secondNum = calculator.displayValue;
-    lineTop.textContent = calculator.firstNum + calculator.secondNum;
+    lineTop.textContent =
+      calculator.firstNum + calculator.operator + calculator.secondNum;
     calculator.waitingForSecondNum = false;
     let x = parseFloat(calculator.firstNum);
     let y = parseFloat(calculator.secondNum);
     calculator.displayValue = operate(calculator.operator, x, y);
-    console.log(String(calculator.displayValue).length);
   }
   if (target.classList.contains("btn-decimal")) {
     if (calculator.displayValue.includes(".")) return;
