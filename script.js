@@ -17,7 +17,9 @@ const btnEqual = document.querySelector(".btn-equal");
 
 const calculator = {
   displayValue: "0",
+  storedValue: "",
   firstNum: null,
+  secondNum: null,
   waitingForSecondNum: false,
   operator: null,
 };
@@ -27,6 +29,7 @@ function init() {
   lineTop.innerHTML = "&nbsp;";
   calculator.displayValue = "0";
   calculator.firstNum = null;
+  calculator.secondNum = null;
   calculator.waitingForSecondNum = false;
   calculator.operator = null;
 }
@@ -50,8 +53,6 @@ function divide(x, y) {
 }
 
 function operate(operation, x, y) {
-  x = Number(x);
-  y = Number(y);
   switch (operation) {
     case "+":
       return add(x, y);
@@ -85,6 +86,23 @@ function displayKeyValues(e) {
 
   if (target.classList.contains("btn-operations")) {
     inputDigits(target.value);
+    calculator.firstNum = calculator.displayValue;
+    calculator.displayValue = "0";
+    lineTop.textContent = calculator.firstNum;
+    calculator.waitingForSecondNum = true;
+
+    if (calculator.waitingForSecondNum) {
+      calculator.operator = calculator.firstNum.slice(-1);
+    }
+  }
+  if (calculator.waitingForSecondNum && target.value === "=") {
+    console.log(calculator);
+    calculator.secondNum = calculator.displayValue;
+    lineTop.textContent = calculator.firstNum + calculator.secondNum;
+    calculator.waitingForSecondNum = false;
+    let x = parseFloat(calculator.firstNum);
+    let y = parseFloat(calculator.secondNum);
+    calculator.displayValue = operate(calculator.operator, x, y);
   }
   if (target.classList.contains("btn-decimal")) {
     if (calculator.displayValue.includes(".")) return;
