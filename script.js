@@ -60,7 +60,7 @@ function operate(operation, x, y) {
       return subtract(x, y);
     case "*":
       return multiply(x, y);
-    case "÷":
+    case "/":
       if (y === 0) return "error";
       else return divide(x, y);
     default:
@@ -69,7 +69,15 @@ function operate(operation, x, y) {
 }
 
 function updateDisplay() {
-  lineBottom.textContent = calculator.displayValue;
+  if (String(calculator.displayValue).length > 9) {
+    lineBottom.style.fontSize = "4rem";
+    lineBottom.textContent = "MAX DIGITS REACHED";
+  } else if (
+    String(calculator.displayValue).length >= 7 &&
+    calculator.displayValue < 1
+  )
+    lineBottom.textContent = Number(calculator.displayValue).toFixed(7);
+  else lineBottom.textContent = calculator.displayValue;
 }
 
 function inputDigits(num) {
@@ -103,6 +111,7 @@ function displayKeyValues(e) {
     let x = parseFloat(calculator.firstNum);
     let y = parseFloat(calculator.secondNum);
     calculator.displayValue = operate(calculator.operator, x, y);
+    console.log(String(calculator.displayValue).length);
   }
   if (target.classList.contains("btn-decimal")) {
     if (calculator.displayValue.includes(".")) return;
