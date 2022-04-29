@@ -154,3 +154,47 @@ keys.addEventListener("click", (event) => {
   inputDigit(target.value);
   updateDisplay();
 });
+
+window.addEventListener("keydown", function (e) {
+  console.log(e);
+
+  let { key } = e;
+  const operations = ["+", "-", "*", "/", "=", "Enter"];
+  const numbers = "0123456789";
+
+  if (numbers.includes(key)) {
+    inputDigit(key);
+    updateDisplay();
+    return;
+  }
+
+  if (operations.includes(key)) {
+    if (key === "Enter") {
+      key = "=";
+      inputOperator(key);
+      updateDisplay();
+    } else {
+      inputOperator(key);
+      updateDisplay();
+    }
+    return;
+  }
+
+  if (key === ".") {
+    inputDecimal(key);
+    updateDisplay();
+    return;
+  }
+
+  if (key === "Delete") {
+    resetCalculator();
+    updateDisplay();
+    return;
+  }
+
+  if (key === "Backspace") {
+    deleteCalculator();
+    updateDisplay();
+    return;
+  }
+});
