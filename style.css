@@ -49,6 +49,10 @@ button:active {
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
 }
 
+.btn-backspace {
+  width: 16rem;
+}
+
 .btn-clear {
   background-color: #e95fa0;
 }
