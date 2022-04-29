@@ -7,66 +7,27 @@ year.textContent = new Date().getFullYear();
 //////////
 const lineTop = document.querySelector(".calculator__monitor-line-1");
 const lineBottom = document.querySelector(".calculator__monitor-line-2");
-const btnNum = document.querySelectorAll(".btn-num");
-const btns = document.querySelectorAll("button");
-const keys = document.querySelector(".calculator__body");
-const btnOperators = document.querySelectorAll(".btn-operations");
-const btnClear = document.querySelector(".btn-clear");
-const btnBackspace = document.querySelector(".btn-backspace");
-const btnEqual = document.querySelector(".btn-equal");
 
 const calculator = {
   displayValue: "0",
   storedValue: "",
-  firstNum: null,
-  secondNum: null,
-  waitingForSecondNum: false,
+  firstOperand: null,
+  waitingForSecondOperand: false,
   operator: null,
 };
 
-function init() {
-  lineBottom.textContent = 0;
-  lineTop.innerHTML = "&nbsp;";
-  lineBottom.style.fontSize = "6rem";
+function resetCalculator() {
   calculator.displayValue = "0";
-  calculator.firstNum = null;
-  calculator.secondNum = null;
-  calculator.waitingForSecondNum = false;
+  calculator.storedValue = "";
+  calculator.firstOperand = null;
+  calculator.waitingForSecondOperand = false;
   calculator.operator = null;
+  lineBottom.style.fontSize = "6rem";
+  console.log(calculator);
 }
 
-init();
-
-function add(x, y) {
-  return x + y;
-}
-
-function subtract(x, y) {
-  return x - y;
-}
-
-function multiply(x, y) {
-  return x * y;
-}
-
-function divide(x, y) {
-  return x / y;
-}
-
-function operate(operation, x, y) {
-  switch (operation) {
-    case "+":
-      return add(x, y);
-    case "-":
-      return subtract(x, y);
-    case "*":
-      return multiply(x, y);
-    case "/":
-      if (y === 0) return "error";
-      else return divide(x, y);
-    default:
-      return null;
-  }
+function deleteCalculator() {
+  calculator.displayValue = calculator.displayValue.slice(0, -1);
 }
 
 function updateDisplay() {
@@ -78,53 +39,118 @@ function updateDisplay() {
   else if (String(calculator.displayValue).length > 9) {
     lineBottom.style.fontSize = "4rem";
     lineBottom.textContent = "MAX DIGITS REACHED";
-  } else lineBottom.textContent = calculator.displayValue;
+  } else {
+    lineBottom.textContent = calculator.displayValue;
+    lineTop.textContent = calculator.storedValue;
+  }
 }
 
-function inputDigits(num) {
-  const { displayValue } = calculator;
-  calculator.displayValue = displayValue === "0" ? num : displayValue + num;
+updateDisplay();
+
+function inputDigit(digit) {
+  const { displayValue, waitingForSecondOperand } = calculator;
+
+  if (waitingForSecondOperand === true) {
+    calculator.displayValue = digit;
+    calculator.waitingForSecondOperand = false;
+  } else {
+    calculator.displayValue =
+      displayValue === "0" ? digit : displayValue + digit;
+  }
+
+  console.log(calculator);
 }
 
-function displayKeyValues(e) {
-  const { target } = e;
+function inputDecimal(dot) {
+  if (calculator.waitingForSecondOperand) {
+    calculator.displayValue = "0.";
+    calculator.waitingForSecondOperand = false;
+    return;
+  }
 
-  if (target.classList.contains("btn-num")) {
-    inputDigits(target.value);
+  if (!calculator.displayValue.includes(dot)) {
+    calculator.displayValue += dot;
+  }
+}
+
+function inputOperator(nextOperator) {
+  const { firstOperand, displayValue, operator } = calculator;
+  const inputValue = parseFloat(displayValue);
+
+  if (operator && calculator.waitingForSecondOperand) {
+    calculator.operator = nextOperator;
+    calculator.storedValue = calculator.storedValue.slice(0, -1);
+    calculator.storedValue += nextOperator;
+    console.log(calculator);
+    return;
+  }
+
+  if (firstOperand == null && !isNaN(inputValue)) {
+    calculator.storedValue += calculator.displayValue + nextOperator;
+    calculator.firstOperand = inputValue;
+  } else if (operator) {
+    calculator.storedValue += calculator.displayValue + nextOperator;
+    const result = calculate(firstOperand, inputValue, operator);
+    calculator.displayValue = `${parseFloat(result.toFixed(7))}`;
+    calculator.firstOperand = result;
+  }
+
+  calculator.waitingForSecondOperand = true;
+  calculator.operator = nextOperator;
+  console.log(calculator);
+}
+
+function calculate(firstOperand, secondOperand, operator) {
+  if (operator === "+") {
+    return firstOperand + secondOperand;
+  } else if (operator === "-") {
+    return firstOperand - secondOperand;
+  } else if (operator === "*") {
+    return firstOperand * secondOperand;
+  } else if (operator === "/") {
+    return firstOperand / secondOperand;
+  }
+
+  return secondOperand;
+}
+
+////Event listeners
+const keys = document.querySelector(".calculator__body");
+
+keys.addEventListener("click", (event) => {
+  // Access the clicked element
+  const { target } = event;
+
+  // Check if the clicked element is a button.
+  // If not, exit from the function
+  if (!target.matches("button")) {
+    return;
   }
 
   if (target.classList.contains("btn-operations")) {
-    console.log(calculator);
-    inputDigits(target.value);
+    inputOperator(target.value);
+    updateDisplay();
+    return;
+  }
 
-    calculator.operator = calculator.displayValue.slice(-1);
-    calculator.firstNum = calculator.displayValue.slice(0, -1);
-    calculator.displayValue = "0";
-    lineTop.textContent = calculator.firstNum + calculator.operator;
-    calculator.waitingForSecondNum = true;
-  }
-  if (calculator.waitingForSecondNum && target.value === "=") {
-    calculator.secondNum = calculator.displayValue;
-    lineTop.textContent =
-      calculator.firstNum + calculator.operator + calculator.secondNum;
-    calculator.waitingForSecondNum = false;
-    let x = parseFloat(calculator.firstNum);
-    let y = parseFloat(calculator.secondNum);
-    calculator.displayValue = operate(calculator.operator, x, y);
-  }
   if (target.classList.contains("btn-decimal")) {
-    if (calculator.displayValue.includes(".")) return;
-    inputDigits(target.value);
+    inputDecimal(target.value);
+    updateDisplay();
+    return;
   }
-  updateDisplay();
-}
 
-//Event listeners
-btnClear.addEventListener("click", init);
+  if (target.classList.contains("btn-clear")) {
+    resetCalculator();
+    updateDisplay();
+    return;
+  }
 
-btnBackspace.addEventListener("click", function (e) {
-  calculator.displayValue = calculator.displayValue.slice(0, -1);
+  if (target.classList.contains("btn-backspace")) {
+    deleteCalculator();
+    updateDisplay();
+    return;
+  }
+
+  inputDigit(target.value);
   updateDisplay();
 });
-
-keys.addEventListener("click", displayKeyValues);
